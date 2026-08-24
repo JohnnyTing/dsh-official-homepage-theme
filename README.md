@@ -53,6 +53,11 @@ npm run test
 ```
 `lib/*` 为生成产物，不要直接编辑。
 
+## 更新版本
+```bash
+npm run version:set -- 1.0.3
+```
+
 ## 目录
 
 ```text
