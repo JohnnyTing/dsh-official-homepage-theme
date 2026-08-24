@@ -51,7 +51,7 @@ npm run check
 npm run build
 npm run test
 ```
-`lib/client.js` 为生成产物，不应直接编辑。
+`lib/*` 为生成产物，不要直接编辑。
 
 ## 目录
 

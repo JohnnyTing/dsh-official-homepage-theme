@@ -1,8 +1,8 @@
 {
   "id": "dsh-official-homepage-theme",
-  "version": "0.1.0",
+  "version": "1.0.1",
   "main": "./lib/index.js",
-  "description": "DSH Web 深蓝玻璃主题：深蓝网格、玻璃面板、流体鼠标效果与动态小鱼。",
+  "description": "DeepSeek Harness官方首页主题：深蓝网格、玻璃面板、流体鼠标效果与动态小鱼。",
   "client": {
     "main": "./lib/client.js",
     "inject": [

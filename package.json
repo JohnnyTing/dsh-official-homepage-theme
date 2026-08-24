@@ -27,6 +27,7 @@
   "files": [
     "lib",
     "src",
+    "static",
     "dsh.plugin.json",
     "cordis.patch.yml",
     "README.md"
