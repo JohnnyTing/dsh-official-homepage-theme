@@ -1,0 +1,4 @@
+# DSH bundle patch: installed profiles merge this layer automatically.
+- insert:
+    - id: dsh-official-homepage-theme
+      name: dsh-official-homepage-theme

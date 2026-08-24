@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Harness fluid preview</title>
+    <style>
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        overflow: hidden;
+        background: #071323;
+      }
+
+      .dsh-harness-official-field {
+        position: fixed;
+        z-index: 0;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+      }
+
+      .dsh-harness-official-fish,
+      .dsh-harness-official-elastic-grid {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+      }
+
+      .dsh-harness-official-fish {
+        z-index: 1;
+      }
+
+      .dsh-harness-official-elastic-grid {
+        z-index: 2;
+      }
+
+      .preview-label {
+        position: fixed;
+        z-index: 3;
+        top: 28px;
+        left: 32px;
+        padding: 8px 12px;
+        color: rgba(240, 247, 255, 0.82);
+        background: rgba(5, 14, 28, 0.58);
+        border: 1px solid rgba(220, 235, 255, 0.16);
+        border-radius: 10px;
+        font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+
+      .preview-label button {
+        margin-left: 10px;
+        padding: 4px 8px;
+        color: #eaf4ff;
+        background: rgba(74, 112, 164, 0.38);
+        border: 1px solid rgba(220, 235, 255, 0.2);
+        border-radius: 6px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="preview-label">
+      移动鼠标验证小鱼避让、方向尾迹、流体与网格联动
+      <button id="simulate-leave" type="button">模拟鼠标离开</button>
+      <button id="toggle-effect" type="button">关闭效果</button>
+    </div>
+    <script type="module">
+      import { createOfficialPointerField } from '../../src/client/pointer-field.js'
+      import { createOfficialElasticGrid } from '../../src/client/elastic-grid.js'
+      import { createOfficialFishSchool } from '../../src/client/fish-school.js'
+      import { createOfficialInteractionSources } from '../../src/client/interaction-sources.js'
+
+      const parameters = new URLSearchParams(window.location.search)
+      const reducedMotion = parameters.has('reduced')
+      if (parameters.has('no-webgl')) {
+        const getContext = HTMLCanvasElement.prototype.getContext
+        HTMLCanvasElement.prototype.getContext = function (type, ...args) {
+          if (type === 'webgl2') return null
+          return getContext.call(this, type, ...args)
+        }
+      }
+      const interactionSources = createOfficialInteractionSources(reducedMotion)
+      const field = createOfficialPointerField(reducedMotion, interactionSources)
+      const fish = createOfficialFishSchool(reducedMotion, interactionSources)
+      const grid = createOfficialElasticGrid(reducedMotion, interactionSources)
+      let enabled = true
+      field.setIntensity(0.86)
+      field.setEnabled(enabled)
+      fish.setEnabled(enabled)
+      grid.setEnabled(enabled)
+      window.__fluidPreview = field
+      window.__elasticGridPreview = grid
+      window.__fishPreview = fish
+      document.querySelector('#simulate-leave').addEventListener('click', () => {
+        window.dispatchEvent(new PointerEvent('pointerleave'))
+      })
+      document.querySelector('#toggle-effect').addEventListener('click', (event) => {
+        enabled = !enabled
+        field.setEnabled(enabled)
+        fish.setEnabled(enabled)
+        grid.setEnabled(enabled)
+        event.currentTarget.textContent = enabled ? '关闭效果' : '开启效果'
+      })
+      window.setInterval(() => {
+        document.body.dataset.fluidDiagnostics = JSON.stringify(field.getDiagnostics())
+        document.body.dataset.gridDiagnostics = JSON.stringify(grid.getDiagnostics())
+        document.body.dataset.fishDiagnostics = JSON.stringify(fish.getDiagnostics())
+      }, 250)
+    </script>
+  </body>
+</html>

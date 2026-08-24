@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Harness generated bundle preview</title>
+    <style>
+      html,
+      body,
+      #root {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+      }
+
+      .bundle-label {
+        position: fixed;
+        z-index: 20;
+        top: 28px;
+        left: 32px;
+        padding: 8px 12px;
+        color: #eef6ff;
+        background: rgba(5, 14, 28, 0.64);
+        border: 1px solid rgba(220, 235, 255, 0.16);
+        border-radius: 10px;
+        font: 13px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+      }
+    </style>
+    <script>
+      window.__ModuleLoader__ = {
+        load(definition) {
+          window.__themePlugin = definition.factory(() => ({}))
+        },
+      }
+    </script>
+    <script src="../../lib/client.js"></script>
+  </head>
+  <body>
+    <div id="root">
+      <div class="bundle-label">generated lib/client.js 三层合成预览</div>
+    </div>
+    <script>
+      const context = {
+        effect(install) { window.__cleanupTheme = install() },
+        on() {},
+        slots: { inject() {} },
+      }
+      window.__themePlugin.apply(context)
+      window.setInterval(() => {
+        document.body.dataset.bundleDiagnostics = JSON.stringify(
+          [...document.querySelectorAll('canvas')].map((canvas) => ({
+            className: canvas.className,
+            height: canvas.height,
+            width: canvas.width,
+          })),
+        )
+      }, 250)
+    </script>
+  </body>
+</html>
