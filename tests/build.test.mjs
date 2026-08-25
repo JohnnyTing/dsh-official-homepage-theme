@@ -80,6 +80,17 @@ test('selected navigation and session rows do not get a pale inset frame', () =>
   assert.doesNotMatch(selectedRule[1], /box-shadow|inset\s+3px/)
 })
 
+test('dsh-market selected category pill stays on the dark harness palette', () => {
+  const selectedMarketPillRule = OFFICIAL_HARNESS_THEME_CSS.match(
+    /button\[data-chip='1'\]\[class\*='_active_'\] \{([\s\S]*?)\}/,
+  )
+
+  assert.ok(selectedMarketPillRule, 'expected the dsh-market selected category rule to exist')
+  assert.match(selectedMarketPillRule[1], /background: rgba\(105, 154, 218, 0\.18\) !important/)
+  assert.match(selectedMarketPillRule[1], /box-shadow: inset 0 0 0 1px rgba\(164, 199, 243, 0\.38\) !important/)
+  assert.doesNotMatch(selectedMarketPillRule[1], /rgb\(235, 238, 242\)|#ebeef2/)
+})
+
 test('blank-session chrome stays transparent while the input card blocks the fluid layer', () => {
   const structuralComposerRule = OFFICIAL_HARNESS_THEME_CSS.match(
     /html\[data-dsh-harness-official-theme\] \[class\*='composer'\] \{([^}]*)\}/,

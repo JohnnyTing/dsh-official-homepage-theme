@@ -231,6 +231,13 @@ html[data-dsh-harness-official-theme] [role='tab']:focus-visible {
   outline-offset: 3px;
 }
 
+html[data-dsh-harness-official-theme] button[data-chip='1'][class*='_active_'] {
+  color: #f7fbff !important;
+  background: rgba(105, 154, 218, 0.18) !important;
+  border-color: transparent !important;
+  box-shadow: inset 0 0 0 1px rgba(164, 199, 243, 0.38) !important;
+}
+
 html[data-dsh-harness-official-theme] [data-slot='settings.general.item'] button[class$='_selector'],
 html[data-dsh-harness-official-theme] [data-slot='settings.general.item'] button[class*='_themeCube'][aria-pressed='true'],
 html[data-dsh-harness-official-theme] [aria-label='命令'][aria-haspopup='listbox'] {
