@@ -21,6 +21,7 @@ export const OFFICIAL_HARNESS_TOKENS = Object.freeze({
   '--dsw-alias-bg-layer-1': '#0a1a30',
   '--dsw-alias-bg-layer-2': '#102641',
   '--dsw-alias-bg-layer-3': '#183653',
+  '--dsw-alias-bg-module-platform': '#183653',
   '--dsw-alias-bg-overlay': '#0f2744',
   '--dsw-alias-bg-mask-1': 'rgba(1, 7, 18, 0.74)',
   '--dsw-alias-bg-mask-2': 'rgba(4, 13, 28, 0.54)',

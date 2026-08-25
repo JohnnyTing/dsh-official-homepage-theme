@@ -136,8 +136,7 @@ html[data-dsh-harness-official-theme] [class*='sidebarCol'] [class$='_root'] {
   background-image: none !important;
 }
 
-html[data-dsh-harness-official-theme] [class*='header'],
-html[data-dsh-harness-official-theme] [class*='Header'],
+html[data-dsh-harness-official-theme] [role='dialog'] > [class$='_content'] > [class$='_header'],
 html[data-dsh-harness-official-theme] [class*='titlebar'],
 html[data-dsh-harness-official-theme] [class*='topbar'] {
   background: rgba(9, 27, 51, 0.34) !important;

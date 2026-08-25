@@ -71,6 +71,16 @@ test('theme keeps code block banners on the dark harness palette', () => {
   assert.equal(OFFICIAL_HARNESS_TOKENS['--dsw-alias-markdown-code-block-banner'], '#0a1a30')
 })
 
+test('model provider editors inherit a dark module surface without tinting nested headers', () => {
+  assert.equal(OFFICIAL_HARNESS_TOKENS['--dsw-alias-bg-module-platform'], '#183653')
+  assert.match(
+    OFFICIAL_HARNESS_THEME_CSS,
+    /\[role='dialog'\] > \[class\$='_content'\] > \[class\$='_header'\]/,
+  )
+  assert.doesNotMatch(OFFICIAL_HARNESS_THEME_CSS, /\[class\*='header'\]/)
+  assert.doesNotMatch(OFFICIAL_HARNESS_THEME_CSS, /\[class\*='Header'\]/)
+})
+
 test('selected navigation and session rows do not get a pale inset frame', () => {
   const selectedRule = OFFICIAL_HARNESS_THEME_CSS.match(
     /\[aria-selected='true'\]:not\(\[role='tab'\]\),[\s\S]*?\[aria-current='true'\] \{([\s\S]*?)\}/,
