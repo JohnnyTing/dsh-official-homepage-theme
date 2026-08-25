@@ -1,6 +1,6 @@
 {
   "name": "dsh-official-homepage-theme",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "description": "DeepSeek Harness官方首页主题插件，包含流体鼠标效果、弹性网格与动态小鱼。",
   "repository": {
