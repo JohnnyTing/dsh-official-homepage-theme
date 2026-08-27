@@ -39,12 +39,6 @@ Install the latest repository version directly from GitHub:
 dsh plugin --profile web add github:JohnnyTing/dsh-official-homepage-theme
 ```
 
-For a reproducible installation, pin the current release tag:
-
-```bash
-dsh plugin --profile web add github:JohnnyTing/dsh-official-homepage-theme#v1.0.5
-```
-
 After installation, refresh or restart DSH Web to load the theme. The package includes the built `lib/` files required by DSH.
 
 ## Local development

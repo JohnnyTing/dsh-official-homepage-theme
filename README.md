@@ -35,12 +35,6 @@ dsh plugin --profile web add dsh-official-homepage-theme
 dsh plugin --profile web add github:JohnnyTing/dsh-official-homepage-theme
 ```
 
-如需固定到当前发布版本，可指定标签：
-
-```bash
-dsh plugin --profile web add github:JohnnyTing/dsh-official-homepage-theme#v1.0.5
-```
-
 本地开发时使用绝对路径：
 
 ```bash
@@ -49,7 +43,7 @@ dsh plugin --profile web add /absolute/path/to/dsh-official-homepage-theme
 
 该包携带 DSH bundle 配置，安装时会自动加入 profile 并加载主题；完成后刷新或重启 DSH Web。
 
-卸载：
+## 卸载
 
 ```bash
 dsh plugin --profile web remove dsh-official-homepage-theme
