@@ -1,6 +1,6 @@
 # DSH Official Homepage Theme
 
-[中文文档](README.md)
+English | [中文](README.md)
 
 `dsh-official-homepage-theme` brings the [official DeepSeek Harness homepage](https://www.deepseek.com/harness/en/) look to DSH Web without changing the page structure or interactions. It includes a fluid background, a pointer-reactive elastic grid, and two animated fish.
 
