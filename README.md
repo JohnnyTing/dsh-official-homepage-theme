@@ -1,5 +1,7 @@
 # dsh-official-homepage-theme
 
+[English README](README_EN.md)
+
 `dsh-official-homepage-theme` 是一个面向DSH Web的[DeepSeek Harness官方首页主题](https://www.deepseek.com/harness/en/)插件，在不改变DSH页面结构与交互的前提下，提供流体背景、鼠标弹性网格和双小鱼动态效果。
 
 ![预览gif](https://raw.githubusercontent.com/JohnnyTing/dsh-official-homepage-theme/main/static/preview.gif)
@@ -23,6 +25,20 @@
 
 ```bash
 dsh plugin --profile web add dsh-official-homepage-theme
+```
+
+### 从 GitHub 安装
+
+直接安装 GitHub 仓库中的最新版本：
+
+```bash
+dsh plugin --profile web add github:JohnnyTing/dsh-official-homepage-theme
+```
+
+如需固定到当前发布版本，可指定标签：
+
+```bash
+dsh plugin --profile web add github:JohnnyTing/dsh-official-homepage-theme#v1.0.5
 ```
 
 本地开发时使用绝对路径：

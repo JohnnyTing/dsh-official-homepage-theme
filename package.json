@@ -45,7 +45,8 @@
     "static",
     "dsh.plugin.json",
     "cordis.patch.yml",
-    "README.md"
+    "README.md",
+    "README_EN.md"
   ],
   "scripts": {
     "build": "node scripts/build.mjs",
