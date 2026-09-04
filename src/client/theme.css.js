@@ -239,7 +239,8 @@ html[data-dsh-harness-official-theme] button[data-chip='1'][class*='_active_'] {
 
 html[data-dsh-harness-official-theme] [data-slot='settings.general.item'] button[class$='_selector'],
 html[data-dsh-harness-official-theme] [data-slot='settings.general.item'] button[class*='_themeCube'][aria-pressed='true'],
-html[data-dsh-harness-official-theme] [aria-label='命令'][aria-haspopup='listbox'] {
+html[data-dsh-harness-official-theme] [data-composer-seat] button[aria-label='命令'][aria-haspopup='listbox'],
+html[data-dsh-harness-official-theme] [data-composer-seat] button[aria-label='指令'][aria-haspopup='listbox'] {
   color: #f6fbff !important;
   background: linear-gradient(145deg, rgba(92, 119, 151, 0.74), rgba(38, 75, 120, 0.84)) !important;
   border: 1px solid rgba(224, 238, 255, 0.28) !important;

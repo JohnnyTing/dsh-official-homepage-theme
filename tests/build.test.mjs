@@ -101,6 +101,24 @@ test('dsh-market selected category pill stays on the dark harness palette', () =
   assert.doesNotMatch(selectedMarketPillRule[1], /rgb\(235, 238, 242\)|#ebeef2/)
 })
 
+test('composer command trigger stays dark across dsh command labels', () => {
+  assert.match(
+    OFFICIAL_HARNESS_THEME_CSS,
+    /\[data-composer-seat\] button\[aria-label='命令'\]\[aria-haspopup='listbox'\]/,
+  )
+  assert.match(
+    OFFICIAL_HARNESS_THEME_CSS,
+    /\[data-composer-seat\] button\[aria-label='指令'\]\[aria-haspopup='listbox'\]/,
+  )
+
+  const commandRule = OFFICIAL_HARNESS_THEME_CSS.match(
+    /\[data-composer-seat\] button\[aria-label='命令'\][\s\S]*?\[data-composer-seat\] button\[aria-label='指令'\][^{]*\{([\s\S]*?)\}/,
+  )
+  assert.ok(commandRule, 'expected one scoped rule for legacy and current command labels')
+  assert.match(commandRule[1], /background: linear-gradient/)
+  assert.doesNotMatch(commandRule[1], /#f5f6f7|rgb\(245,\s*246,\s*247\)/)
+})
+
 test('blank-session chrome stays transparent while the input card blocks the fluid layer', () => {
   const structuralComposerRule = OFFICIAL_HARNESS_THEME_CSS.match(
     /html\[data-dsh-harness-official-theme\] \[class\*='composer'\] \{([^}]*)\}/,
