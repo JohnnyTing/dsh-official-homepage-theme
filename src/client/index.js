@@ -7,6 +7,7 @@ import { createOfficialFishSchool } from './fish-school.js'
 const PLUGIN_ID = 'dsh-official-homepage-theme'
 const STYLE_SELECTOR = 'style[data-plugin-css="dsh-official-homepage-theme/theme.css"]'
 const SETTINGS_KEY = 'dsh.harness-official.pointer-effects.v1'
+const DARK_PALETTE_ATTRIBUTE = 'data-ds-dark-theme'
 const DEFAULT_SETTINGS = Object.freeze({
   enabled: true,
   fishEnabled: true,
@@ -209,6 +210,39 @@ function OfficialPointerRow(props) {
   )
 }
 
+/**
+ * Pin the host to its dark palette while the replica is applied.
+ *
+ * The host theme presenter resolves the light/dark palette from the user's
+ * appearance preference and only records it as `body[data-ds-dark-theme]`.
+ * The official homepage replica is always dark but restates a hand-picked
+ * slice of the palette, so a light host appearance leaks the remaining light
+ * tokens into chrome the theme never mentions - `--dsw-specific-selector`
+ * painted the composer's attachment trigger as a white sphere, and
+ * `--dsw-specific-tip` whitened the goal and todo docks. Re-assert the dark
+ * palette for as long as the theme is applied, then hand the host's own
+ * choice back on dispose.
+ */
+function installDarkPaletteLock() {
+  const body = document.body
+  const wasDark = body.hasAttribute(DARK_PALETTE_ATTRIBUTE)
+  const applyPalette = () => {
+    if (!body.hasAttribute(DARK_PALETTE_ATTRIBUTE)) body.setAttribute(DARK_PALETTE_ATTRIBUTE, '')
+  }
+
+  applyPalette()
+  const observer = new MutationObserver(applyPalette)
+  observer.observe(body, { attributes: true, attributeFilter: [DARK_PALETTE_ATTRIBUTE] })
+
+  return {
+    applyPalette,
+    restore: () => {
+      observer.disconnect()
+      if (!wasDark) body.removeAttribute(DARK_PALETTE_ATTRIBUTE)
+    }
+  }
+}
+
 function installTokenOverrides() {
   const targets = [document.documentElement, document.body]
   const previous = new Map()
@@ -244,11 +278,19 @@ export function apply(ctx) {
   ctx.effect(() => {
     const style = installStyle()
     const stopBackground = installBackgroundLayer()
+    const palette = installDarkPaletteLock()
     const tokens = installTokenOverrides()
     const pointer = createSettingsController()
     const stopPointerEffects = installPointerEffects(pointer)
     document.documentElement.setAttribute('data-dsh-harness-official-theme', '')
-    ctx.on('theme/change', () => { queueMicrotask(tokens.applyTokens) })
+    /* The presenter rewrites the body palette attribute on every theme change;
+       re-assert the replica's palette after it settled for this revision. */
+    ctx.on('theme/change', () => {
+      queueMicrotask(() => {
+        palette.applyPalette()
+        tokens.applyTokens()
+      })
+    })
     ctx.slots.inject('settings.general.item', () => ctx.slots.register({
       name: 'settings.general.item',
       id: 'harness-official-pointer-effects',
@@ -261,6 +303,7 @@ export function apply(ctx) {
       stopBackground()
       style?.remove()
       tokens.restore()
+      palette.restore()
       document.documentElement.removeAttribute('data-dsh-harness-official-theme')
     }
   }, 'harness-official-theme: fluid, elastic grid and autonomous fish')

@@ -1,7 +1,9 @@
 export const OFFICIAL_HARNESS_THEME_CSS = String.raw`
 html[data-dsh-harness-official-theme] {
   --dsh-harness-official-intensity: 0.86;
-  color-scheme: dark;
+  /* The host presenter writes the resolved scheme inline, so the replica needs
+     the important flag to keep native scrollbars and form controls dark. */
+  color-scheme: dark !important;
   background: #071323;
 }
 
@@ -237,10 +239,9 @@ html[data-dsh-harness-official-theme] button[data-chip='1'][class*='_active_'] {
   box-shadow: inset 0 0 0 1px rgba(164, 199, 243, 0.38) !important;
 }
 
+html[data-dsh-harness-official-theme] [data-composer-card] button[class$='_add'],
 html[data-dsh-harness-official-theme] [data-slot='settings.general.item'] button[class$='_selector'],
-html[data-dsh-harness-official-theme] [data-slot='settings.general.item'] button[class*='_themeCube'][aria-pressed='true'],
-html[data-dsh-harness-official-theme] [data-composer-seat] button[aria-label='命令'][aria-haspopup='listbox'],
-html[data-dsh-harness-official-theme] [data-composer-seat] button[aria-label='指令'][aria-haspopup='listbox'] {
+html[data-dsh-harness-official-theme] [data-slot='settings.general.item'] button[class*='_themeCube'][aria-pressed='true'] {
   color: #f6fbff !important;
   background: linear-gradient(145deg, rgba(92, 119, 151, 0.74), rgba(38, 75, 120, 0.84)) !important;
   border: 1px solid rgba(224, 238, 255, 0.28) !important;

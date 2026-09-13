@@ -101,22 +101,35 @@ test('dsh-market selected category pill stays on the dark harness palette', () =
   assert.doesNotMatch(selectedMarketPillRule[1], /rgb\(235, 238, 242\)|#ebeef2/)
 })
 
-test('composer command trigger stays dark across dsh command labels', () => {
+test('composer tool triggers stay dark without depending on the host locale', () => {
   assert.match(
     OFFICIAL_HARNESS_THEME_CSS,
-    /\[data-composer-seat\] button\[aria-label='命令'\]\[aria-haspopup='listbox'\]/,
+    /\[data-composer-card\] button\[class\$='_add'\]/,
   )
-  assert.match(
-    OFFICIAL_HARNESS_THEME_CSS,
-    /\[data-composer-seat\] button\[aria-label='指令'\]\[aria-haspopup='listbox'\]/,
-  )
+  /* The trigger labels are translated host copy, so a locale-scoped rule would
+     lose its grip in every non-Chinese session. */
+  assert.doesNotMatch(OFFICIAL_HARNESS_THEME_CSS, /button\[aria-label='命令'\]|button\[aria-label='指令'\]/)
 
   const commandRule = OFFICIAL_HARNESS_THEME_CSS.match(
-    /\[data-composer-seat\] button\[aria-label='命令'\][\s\S]*?\[data-composer-seat\] button\[aria-label='指令'\][^{]*\{([\s\S]*?)\}/,
+    /\[data-composer-card\] button\[class\$='_add'\][\s\S]*?\[data-slot='settings\.general\.item'\][^{]*\{([\s\S]*?)\}/,
   )
-  assert.ok(commandRule, 'expected one scoped rule for legacy and current command labels')
+  assert.ok(commandRule, 'expected one scoped rule for the composer command and attachment triggers')
   assert.match(commandRule[1], /background: linear-gradient/)
   assert.doesNotMatch(commandRule[1], /#f5f6f7|rgb\(245,\s*246,\s*247\)/)
+})
+
+test('theme pins the host to the dark palette that owns the un-restated tokens', async () => {
+  const client = await readFile(resolve(root, 'src/client/index.js'), 'utf8')
+
+  assert.match(client, /const DARK_PALETTE_ATTRIBUTE = 'data-ds-dark-theme'/)
+  assert.match(client, /function installDarkPaletteLock\(\)/)
+  assert.match(client, /body\.setAttribute\(DARK_PALETTE_ATTRIBUTE, ''\)/)
+  assert.match(client, /observer\.observe\(body, \{ attributes: true, attributeFilter: \[DARK_PALETTE_ATTRIBUTE\] \}\)/)
+  assert.match(client, /if \(!wasDark\) body\.removeAttribute\(DARK_PALETTE_ATTRIBUTE\)/)
+
+  /* The light palette paints --dsw-specific-selector #f5f6f7, which is the
+     white sphere the light appearance left on the composer attachment trigger. */
+  assert.match(OFFICIAL_HARNESS_THEME_CSS, /color-scheme: dark !important/)
 })
 
 test('blank-session chrome stays transparent while the input card blocks the fluid layer', () => {
