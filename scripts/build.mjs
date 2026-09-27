@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const clientPath = resolve(root, 'src/client/index.js')
 const client = await readFile(clientPath, 'utf8')
+const settings = await readFile(resolve(root, 'src/client/settings.js'), 'utf8')
 const fluidProfile = await readFile(resolve(root, 'src/client/fluid-profile.js'), 'utf8')
 const fluidShaders = await readFile(resolve(root, 'src/client/fluid-shaders.js'), 'utf8')
 const pointerField = await readFile(resolve(root, 'src/client/pointer-field.js'), 'utf8')
@@ -45,6 +46,7 @@ const output = [
   transformedFishDrawing,
   transformedFishSchool,
   transformedElasticGrid,
+  transformModule(settings),
   transformed,
   'module.exports = { apply, inject };',
   'return module.exports; } });',

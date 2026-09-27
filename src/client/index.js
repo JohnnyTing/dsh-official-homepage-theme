@@ -3,17 +3,11 @@ import { createOfficialInteractionSources } from './interaction-sources.js'
 import { createOfficialPointerField } from './pointer-field.js'
 import { createOfficialElasticGrid } from './elastic-grid.js'
 import { createOfficialFishSchool } from './fish-school.js'
+import { createSettingsController, createHostSettingsForm } from './settings.js'
 
 const PLUGIN_ID = 'dsh-official-homepage-theme'
 const STYLE_SELECTOR = 'style[data-plugin-css="dsh-official-homepage-theme/theme.css"]'
-const SETTINGS_KEY = 'dsh.harness-official.pointer-effects.v1'
 const DARK_PALETTE_ATTRIBUTE = 'data-ds-dark-theme'
-const DEFAULT_SETTINGS = Object.freeze({
-  enabled: true,
-  fishEnabled: true,
-  gridEnabled: true,
-  intensity: 0.86,
-})
 
 export const inject = ['slots']
 
@@ -83,46 +77,6 @@ function installBackgroundLayer() {
   return () => { layer.remove() }
 }
 
-function normalizeSettings(value) {
-  const intensity = Number(value?.intensity)
-  return Object.freeze({
-    enabled: value?.enabled !== false,
-    fishEnabled: value?.fishEnabled !== false,
-    gridEnabled: value?.gridEnabled !== false,
-    intensity: Number.isFinite(intensity) ? Math.min(1, Math.max(0.18, intensity)) : DEFAULT_SETTINGS.intensity
-  })
-}
-
-function readSettings() {
-  try {
-    const saved = window.localStorage.getItem(SETTINGS_KEY)
-    if (saved !== null) return normalizeSettings(JSON.parse(saved))
-  } catch {}
-  return DEFAULT_SETTINGS
-}
-
-function createSettingsController() {
-  let settings = readSettings()
-  const listeners = new Set()
-  const notify = () => { for (const listener of listeners) listener() }
-  const persist = () => {
-    try { window.localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)) } catch {}
-  }
-
-  return {
-    get: () => settings,
-    set: (update) => {
-      settings = normalizeSettings({ ...settings, ...update })
-      persist()
-      notify()
-    },
-    subscribe: (listener) => {
-      listeners.add(listener)
-      return () => { listeners.delete(listener) }
-    }
-  }
-}
-
 function installPointerEffects(settings) {
   const root = document.documentElement
   const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true
@@ -132,7 +86,7 @@ function installPointerEffects(settings) {
   const grid = createOfficialElasticGrid(reducedMotion, interactionSources)
 
   const applySettings = () => {
-    const value = settings.get()
+    const value = settings.get().value
     root.toggleAttribute('data-dsh-harness-official-pointer-disabled', !value.enabled)
     root.style.setProperty('--dsh-harness-official-intensity', String(value.intensity))
     field.setIntensity(value.intensity)
@@ -156,9 +110,12 @@ function installPointerEffects(settings) {
 
 function OfficialPointerRow(props) {
   const React = require('react')
-  const settings = React.useSyncExternalStore(props.pointer.subscribe, props.pointer.get, props.pointer.get)
+  const state = React.useSyncExternalStore(props.pointer.subscribe, props.pointer.get, props.pointer.get)
+  const settings = state.value
+  const message = state.error || (state.saving ? '正在保存…' : state.loading ? '正在读取设置…' : !state.editable ? '插件配置暂不可用，无法保存设置。' : '')
   const intensityPercent = Math.round(settings.intensity * 100)
   return React.createElement('section', { className: 'dsh-harness-official-settings', 'data-dsh-harness-official-settings': '' },
+    message ? React.createElement('div', { role: state.error ? 'alert' : 'status', style: { gridColumn: '1 / -1' } }, message) : null,
     React.createElement('div', { className: 'dsh-harness-official-copy' },
       React.createElement('strong', null, '流体效果'),
       React.createElement('span', null, '流体持续缓慢流动，并随鼠标方向、速度和位置产生水波、卷曲、光照与渐进恢复。')
@@ -166,6 +123,7 @@ function OfficialPointerRow(props) {
     React.createElement('label', { className: 'dsh-harness-official-switch' },
       React.createElement('input', {
         type: 'checkbox',
+        disabled: !state.editable,
         checked: settings.enabled,
         onChange: (event) => { props.pointer.set({ enabled: event.target.checked }) }
       }),
@@ -179,7 +137,7 @@ function OfficialPointerRow(props) {
         max: '100',
         step: '1',
         value: intensityPercent,
-        disabled: !settings.enabled,
+        disabled: !settings.enabled || !state.editable,
         onChange: (event) => { props.pointer.set({ intensity: Number(event.target.value) / 100 }) }
       })
     ),
@@ -190,6 +148,7 @@ function OfficialPointerRow(props) {
     React.createElement('label', { className: 'dsh-harness-official-switch' },
       React.createElement('input', {
         type: 'checkbox',
+        disabled: !state.editable,
         checked: settings.gridEnabled,
         onChange: (event) => { props.pointer.set({ gridEnabled: event.target.checked }) }
       }),
@@ -202,6 +161,7 @@ function OfficialPointerRow(props) {
     React.createElement('label', { className: 'dsh-harness-official-switch' },
       React.createElement('input', {
         type: 'checkbox',
+        disabled: !state.editable,
         checked: settings.fishEnabled,
         onChange: (event) => { props.pointer.set({ fishEnabled: event.target.checked }) }
       }),
@@ -280,7 +240,8 @@ export function apply(ctx) {
     const stopBackground = installBackgroundLayer()
     const palette = installDarkPaletteLock()
     const tokens = installTokenOverrides()
-    const pointer = createSettingsController()
+    const form = createHostSettingsForm(ctx, PLUGIN_ID)
+    const pointer = createSettingsController(form)
     const stopPointerEffects = installPointerEffects(pointer)
     document.documentElement.setAttribute('data-dsh-harness-official-theme', '')
     /* The presenter rewrites the body palette attribute on every theme change;
@@ -300,6 +261,8 @@ export function apply(ctx) {
 
     return () => {
       stopPointerEffects()
+      pointer.destroy()
+      form.destroy()
       stopBackground()
       style?.remove()
       tokens.restore()

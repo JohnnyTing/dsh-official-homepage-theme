@@ -43,7 +43,20 @@
       const context = {
         effect(install) { window.__cleanupTheme = install() },
         on() {},
+        inject([service], install) {
+          let cleanup
+          if (this[service]) install({ [service]: this[service], effect(fn) { cleanup = fn() } })
+          return { dispose() { cleanup?.() } }
+        },
         slots: { inject() {} },
+        configForms: {
+          get() {
+            return {
+              getSnapshot: () => ({ status: 'ready', mode: 'memory', writable: false, value: { enabled: true, fishEnabled: true, gridEnabled: true, intensity: 0.86 } }),
+              subscribe: () => () => {},
+            }
+          },
+        },
       }
       window.__themePlugin.apply(context)
       window.setInterval(() => {

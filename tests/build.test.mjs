@@ -274,9 +274,11 @@ test('fish layer sits between fluid and elastic grid without intercepting input'
   assert.match(OFFICIAL_HARNESS_THEME_CSS, /@media \(max-width: 767px\)[\s\S]*?\.dsh-harness-official-fish/)
 })
 
-test('settings migrate autonomous fish to enabled and expose an independent toggle', async () => {
+test('settings use plugin config and expose independent fish controls', async () => {
   const source = await readFile(resolve(root, 'src/client/index.js'), 'utf8')
-  assert.match(source, /fishEnabled: value\?\.fishEnabled !== false/)
+  const settings = await readFile(resolve(root, 'src/client/settings.js'), 'utf8')
+  assert.doesNotMatch(source + settings, /localStorage|SETTINGS_KEY/)
+  assert.match(source, /createHostSettingsForm\(ctx, PLUGIN_ID\)/)
   assert.match(source, /checked: settings\.fishEnabled/)
   assert.match(source, /fish\.setEnabled\(value\.fishEnabled\)/)
 })
