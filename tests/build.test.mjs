@@ -107,6 +107,29 @@ test('selected navigation and session rows do not get a pale inset frame', () =>
   assert.doesNotMatch(selectedRule[1], /box-shadow|inset\s+3px/)
 })
 
+test('sidebar brand hover remains transparent in source and shipped bundle', async () => {
+  const client = await readFile(resolve(root, 'lib/client.js'), 'utf8')
+  for (const css of [OFFICIAL_HARNESS_THEME_CSS, client]) {
+    const rule = css.match(
+      /\[class\*='_logoRow'\] > button\[class\*='_brand'\]:hover:not\(:disabled\) \{([^}]+)\}/,
+    )
+    assert.ok(rule, 'expected a scoped sidebar brand hover override')
+    assert.match(rule[1], /background: transparent !important/)
+    assert.match(rule[1], /box-shadow: none !important/)
+    assert.doesNotMatch(rule[1], /outline/)
+  }
+})
+
+test('sidebar resize divider hover stays subtle on the dark theme', () => {
+  const dividerHoverRule = OFFICIAL_HARNESS_THEME_CSS.match(
+    /\[class\*='_splitRow_'\] > \[class\*='_divider_'\]:hover::after \{([\s\S]*?)\}/,
+  )
+
+  assert.ok(dividerHoverRule, 'expected a scoped horizontal split divider hover override')
+  assert.match(dividerHoverRule[1], /rgba\(121, 169, 237, 0\.28\)/)
+  assert.doesNotMatch(dividerHoverRule[1], /--dsw-alias-label-caption/)
+})
+
 test('dsh-market selected category pill stays on the dark harness palette', () => {
   const selectedMarketPillRule = OFFICIAL_HARNESS_THEME_CSS.match(
     /button\[data-chip='1'\]\[class\*='_active_'\] \{([\s\S]*?)\}/,

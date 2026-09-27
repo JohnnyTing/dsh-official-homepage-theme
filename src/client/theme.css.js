@@ -133,6 +133,15 @@ html[data-dsh-harness-official-theme] [class*='sidebarCol'] [class$='_root'] {
   background-image: none !important;
 }
 
+html[data-dsh-harness-official-theme] [class*='_splitRow_'] > [class*='_divider_']:hover::after {
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(121, 169, 237, 0.28) 50%,
+    transparent
+  ) center / 1px 100% no-repeat !important;
+}
+
 html[data-dsh-harness-official-theme] [role='dialog'] > [class$='_content'] > [class$='_header'],
 html[data-dsh-harness-official-theme] [class*='titlebar'],
 html[data-dsh-harness-official-theme] [class*='topbar'] {
@@ -199,6 +208,14 @@ html[data-dsh-harness-official-theme] [role='button']:hover {
   background-color: rgba(183, 211, 247, 0.14) !important;
   border-color: rgba(225, 239, 255, 0.26) !important;
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.08), 0 8px 24px rgba(2, 12, 32, 0.18);
+}
+
+/* The sidebar wordmark is a full-width, borderless button. Keep the shared
+   button hover treatment from painting a rectangle behind the artwork. */
+html[data-dsh-harness-official-theme] [class*='_logoRow'] > button[class*='_brand']:hover:not(:disabled) {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
 html[data-dsh-harness-official-theme] button:active:not(:disabled),
