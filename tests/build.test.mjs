@@ -71,6 +71,16 @@ test('theme keeps code block banners on the dark harness palette', () => {
   assert.equal(OFFICIAL_HARNESS_TOKENS['--dsw-alias-markdown-code-block-banner'], '#0a1a30')
 })
 
+test('inline code decoration stays inside markdown content', () => {
+  assert.match(OFFICIAL_HARNESS_THEME_CSS, /\[class\*='_markdown_'\] :not\(pre\) > code \{/)
+  assert.doesNotMatch(OFFICIAL_HARNESS_THEME_CSS, /html\[data-dsh-harness-official-theme\] :not\(pre\) > code \{/)
+})
+
+test('menu surface styling does not paint nested menu labels', () => {
+  assert.match(OFFICIAL_HARNESS_THEME_CSS, /html\[data-dsh-harness-official-theme\] \[role='menu'\]/)
+  assert.doesNotMatch(OFFICIAL_HARNESS_THEME_CSS, /\[class\*='menu'\]/)
+})
+
 test('model provider editors inherit a dark module surface without tinting nested headers', () => {
   assert.equal(OFFICIAL_HARNESS_TOKENS['--dsw-alias-bg-module-platform'], '#183653')
   assert.match(

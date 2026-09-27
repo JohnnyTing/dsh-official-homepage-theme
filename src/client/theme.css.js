@@ -164,7 +164,7 @@ html[data-dsh-harness-official-theme] [data-composer-seat] [class*='Card'] {
 
 html[data-dsh-harness-official-theme] [role='dialog'],
 html[data-dsh-harness-official-theme] [class*='popover'],
-html[data-dsh-harness-official-theme] [class*='menu'],
+html[data-dsh-harness-official-theme] [role='menu'],
 html[data-dsh-harness-official-theme] [class*='dropdown'] {
   color: #eef6ff !important;
   background: linear-gradient(145deg, rgba(32, 55, 84, 0.78), rgba(12, 29, 51, 0.9)) !important;
@@ -276,7 +276,7 @@ html[data-dsh-harness-official-theme] code {
   color: inherit !important;
 }
 
-html[data-dsh-harness-official-theme] :not(pre) > code {
+html[data-dsh-harness-official-theme] [class*='_markdown_'] :not(pre) > code {
   color: #d8eaff !important;
   background: rgba(137, 174, 220, 0.17) !important;
   border: 1px solid rgba(205, 225, 250, 0.12) !important;
