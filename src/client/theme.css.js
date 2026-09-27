@@ -121,11 +121,6 @@ html[data-dsh-harness-official-theme] ::selection {
   background: #d7e8ff;
 }
 
-html[data-dsh-harness-official-theme] :focus-visible {
-  outline: 1px solid rgba(121, 169, 237, 0.62) !important;
-  outline-offset: 2px;
-}
-
 html[data-dsh-harness-official-theme] [class*='sidebarCol'] {
   background: linear-gradient(180deg, rgba(6, 20, 39, 0.48), rgba(3, 13, 27, 0.62)) !important;
   border-color: rgba(205, 224, 249, 0.16) !important;

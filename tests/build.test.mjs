@@ -67,6 +67,13 @@ test('theme keeps tabs and user bubbles on the harness palette', () => {
   assert.doesNotMatch(OFFICIAL_HARNESS_THEME_CSS, /outline: 2px solid rgba\(214, 233, 255, 0\.9\)/)
 })
 
+test('focused inputs use the host focus indicator without an extra theme outline', () => {
+  assert.doesNotMatch(
+    OFFICIAL_HARNESS_THEME_CSS,
+    /html\[data-dsh-harness-official-theme\] :focus-visible \{/,
+  )
+})
+
 test('theme keeps code block banners on the dark harness palette', () => {
   assert.equal(OFFICIAL_HARNESS_TOKENS['--dsw-alias-markdown-code-block-banner'], '#0a1a30')
 })
