@@ -38,6 +38,7 @@ test('real DSH Config saves all preferences to its profile and reloads after res
     const describe = () => ctx.settings.describe().find(row => row.ns === id)
     const first = describe()
     assert.ok(first, 'theme Config must be discovered by actual Loader/settings')
+    assert.equal(ctx.settings.writable, true, 'the profile must accept form edits')
     assert.deepEqual(first.value, { enabled: true, fishEnabled: true, gridEnabled: true, intensity: 0.86 })
     const saved = { enabled: false, fishEnabled: false, gridEnabled: false, intensity: 0.42 }
     await ctx.settings.mutate(id, Object.entries(saved).map(([field, value]) => ({ op: 'set', path: [field], value })), first.revision)

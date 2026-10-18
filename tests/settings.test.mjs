@@ -3,7 +3,8 @@ import test from 'node:test'
 import { createSettingsController, DEFAULT_SETTINGS } from '../src/client/settings.js'
 
 function hostForm(value = DEFAULT_SETTINGS) {
-  let snapshot = { status: 'ready', mode: 'host', writable: true, value }
+  // Mirror the DSH 0.2.1 form snapshot: writable is the only write authority.
+  let snapshot = { status: 'ready', writable: true, value }
   const listeners = new Set()
   const form = {
     getSnapshot: () => snapshot,
@@ -55,6 +56,29 @@ test('loading, unavailable and memory-only forms never write default values to h
     assert.equal(await controller.set({ enabled: false }), false)
     controller.destroy()
   }
+})
+
+test('legacy hosts that still report a host-backed mode stay editable', async () => {
+  const form = hostForm()
+  form.publish({ mode: 'host' })
+  const controller = createSettingsController(form)
+  assert.equal(controller.get().editable, true)
+  assert.equal(await controller.set({ enabled: false }), true)
+  controller.destroy()
+})
+
+test('legacy scopes that resolve without a write verdict count as saved', async () => {
+  const form = hostForm()
+  form.mutate = async ops => {
+    const next = { ...form.getSnapshot().value }
+    for (const op of ops) next[op.path[0]] = op.value
+    form.publish({ value: next })
+  }
+  const controller = createSettingsController(form)
+  assert.equal(await controller.set({ enabled: false }), true)
+  assert.equal(controller.get().error, '')
+  assert.equal(controller.get().value.enabled, false)
+  controller.destroy()
 })
 
 test('previews a pending write and rolls back with visible failure on refusal', async () => {
