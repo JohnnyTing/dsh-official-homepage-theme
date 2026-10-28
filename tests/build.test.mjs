@@ -59,6 +59,23 @@ test('theme contains scoped visual layer and pointer controls', async () => {
   assert.match(client, /流体持续缓慢流动，并随鼠标方向、速度和位置产生水波、卷曲、光照与渐进恢复。/)
 })
 
+test('decorative viewport layers leave the desktop drag region alone', async () => {
+  const rule = OFFICIAL_HARNESS_THEME_CSS.match(
+    /html\[data-dsh-harness-official-theme\] \.dsh-harness-official-bg,[\s\S]*?\.dsh-harness-official-elastic-grid \{([\s\S]*?)\}/,
+  )
+
+  assert.ok(rule, 'expected the shared viewport-layer rule to exist')
+  for (const layer of ['bg', 'field', 'fish', 'elastic-grid']) {
+    assert.match(rule[0], new RegExp(`\\.dsh-harness-official-${layer}\\b`))
+  }
+  assert.match(rule[1], /pointer-events: none;/)
+  assert.match(rule[1], /-webkit-app-region: initial !important;/)
+  assert.doesNotMatch(rule[1], /-webkit-app-region: (?:no-drag|drag)/)
+
+  const client = await readFile(resolve(root, 'lib/client.js'), 'utf8')
+  assert.match(client, /-webkit-app-region: initial !important/)
+})
+
 test('theme keeps tabs and user bubbles on the harness palette', () => {
   assert.equal(OFFICIAL_HARNESS_TOKENS['--dsw-alias-state-business-primary'], '#79a9ed')
   assert.equal(OFFICIAL_HARNESS_TOKENS['--dsw-specific-bubble'], 'rgba(16, 42, 70, 0.9)')

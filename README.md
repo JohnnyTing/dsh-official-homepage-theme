@@ -2,7 +2,7 @@
 
 [English](README_EN.md) | 中文
 
-`dsh-official-homepage-theme` 是一个面向DSH Web的[DeepSeek Harness官方首页主题](https://www.deepseek.com/harness/en/)插件，在不改变DSH页面结构与交互的前提下，提供流体背景、鼠标弹性网格和双小鱼动态效果。
+`dsh-official-homepage-theme` 是一个面向DSH Web的[DeepSeek Harness官方首页主题](https://www.deepseek.com/harness/en/)插件，在不改变DSH页面结构与交互的前提下，提供流体背景、鼠标弹性网格和可结群、会捕食的小鱼群。
 
 ![预览gif](https://raw.githubusercontent.com/JohnnyTing/dsh-official-homepage-theme/main/static/preview.gif)
 ![预览图](https://raw.githubusercontent.com/JohnnyTing/dsh-official-homepage-theme/main/static/preview.png)
@@ -14,7 +14,8 @@
 - 深蓝渐变、半透明玻璃表面和主题 token；
 - 程序化流体背景与鼠标交互效果；
 - Canvas2D 鼠标弹性网格；
-- 两条自主游动、会避让鼠标的小鱼；
+- 大小不一的小鱼群：结群游动、抢食小虾、躲避大鱼；鼠标靠近时整群受惊四散，被吞掉后会重新出现；
+- 大鱼会冲刺捕食并逐渐长大；长时间找不到食物会饿死，尸体可被小鱼分食；
 - 效果开关与强度设置；
 - `prefers-reduced-motion`、粗指针设备和页面可见性适配；
 - 卸载时清理动画、事件、DOM 与图形资源。

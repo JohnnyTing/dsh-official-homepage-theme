@@ -39,7 +39,7 @@ export function createOfficialInteractionSources(reducedMotion) {
       OFFICIAL_ELASTIC_GRID_PROFILE.repulsion,
     ),
     makeSource(
-      'fish-a',
+      'fish-predator',
       'fish',
       OFFICIAL_FISH_PROFILE.fluidRadius,
       OFFICIAL_FLUID_PROFILE.mouseStrength * OFFICIAL_FISH_PROFILE.fluidStrength,
@@ -47,7 +47,7 @@ export function createOfficialInteractionSources(reducedMotion) {
       OFFICIAL_ELASTIC_GRID_PROFILE.fishRepulsion,
     ),
     makeSource(
-      'fish-b',
+      'fish-school',
       'fish',
       OFFICIAL_FISH_PROFILE.fluidRadius,
       OFFICIAL_FLUID_PROFILE.mouseStrength * OFFICIAL_FISH_PROFILE.fluidStrength,

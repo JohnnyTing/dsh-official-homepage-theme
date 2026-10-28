@@ -2,7 +2,7 @@
 
 English | [中文](README.md)
 
-`dsh-official-homepage-theme` brings the [official DeepSeek Harness homepage](https://www.deepseek.com/harness/en/) look to DSH Web without changing the page structure or interactions. It includes a fluid background, a pointer-reactive elastic grid, and two animated fish.
+`dsh-official-homepage-theme` brings the [official DeepSeek Harness homepage](https://www.deepseek.com/harness/en/) look to DSH Web without changing the page structure or interactions. It includes a fluid background, a pointer-reactive elastic grid, and a small school of animated fish with a predator.
 
 ![Theme preview](https://raw.githubusercontent.com/JohnnyTing/dsh-official-homepage-theme/main/static/preview.gif)
 ![Theme screenshot](https://raw.githubusercontent.com/JohnnyTing/dsh-official-homepage-theme/main/static/preview.png)
@@ -13,7 +13,8 @@ English | [中文](README.md)
 - Deep-blue gradients, translucent glass surfaces, and theme tokens.
 - A procedural fluid background that responds to pointer movement.
 - A Canvas2D elastic grid.
-- Two autonomous fish that avoid the pointer.
+- A mixed-size school of fish that schools, feeds on shrimp and flees a predator; moving the mouse into the school scatters it, and eaten fish respawn.
+- The big fish sprints to hunt and grows with each meal; it starves if it cannot find food, and the school scavenges its carcass.
 - Controls for enabling effects and adjusting their intensity.
 - Support for `prefers-reduced-motion`, coarse pointers, and page visibility changes.
 - Cleanup of animations, event listeners, DOM nodes, and graphic resources on unload.
