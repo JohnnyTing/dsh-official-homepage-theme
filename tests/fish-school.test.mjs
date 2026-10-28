@@ -52,6 +52,8 @@ test('fish population mixes one predator, a tight school and a gold pair', () =>
   assert.ok(OFFICIAL_FISH_PROFILE.shrimp.count > 0)
   assert.ok(OFFICIAL_FISH_PROFILE.schooling.pointerScareRadius > OFFICIAL_FISH_PROFILE.schooling.pointerFleeRadius)
   assert.ok(OFFICIAL_FISH_PROFILE.schooling.panicCohesionScale < 1)
+  assert.ok(OFFICIAL_FISH_PROFILE.predation.sprintStaminaSeconds > 0)
+  assert.ok(OFFICIAL_FISH_PROFILE.schooling.startleSpeedBoost > OFFICIAL_FISH_PROFILE.predation.sprintSpeed)
 })
 
 test('a calm fish wanders deterministically and keeps its cruise speed', () => {
@@ -169,6 +171,38 @@ test('the predator bites a nearby smaller fish and creates one effect', () => {
   assert.equal(effects[0].maxLife, OFFICIAL_FISH_PROFILE.predation.effectSeconds)
 })
 
+test('a startle burst can let a small fish escape a sprinting predator', () => {
+  const fishes = createFishStates(1440, 900, fixedRandom)
+  const predator = fishes.find((fish) => fish.role === 'predator')
+  const prey = fishes.find((fish) => fish.group === 'school')
+  for (const other of preyOnly(fishes)) {
+    if (other === prey) continue
+    other.x = 1300
+    other.y = 100 + other.length
+  }
+  predator.x = 400
+  predator.y = 450
+  predator.heading = 0
+  predator.targetHeading = 0
+  predator.satiety = 0
+  predator.hunger = 0
+  prey.x = 550
+  prey.y = 450
+  prey.heading = 0
+  prey.targetHeading = 0
+
+  let caught = false
+  for (let step = 0; step < 20 * 30; step += 1) {
+    advanceFishSchool(fishes, { active: false }, 1440, 900, 1 / 30, fixedRandom)
+    if (prey.eaten) {
+      caught = true
+      break
+    }
+  }
+
+  assert.equal(caught, false, 'a fast-startled prey should sometimes outrun the predator')
+})
+
 test('the predator ignores the larger gold pair', () => {
   const fishes = createFishStates(1000, 700, fixedRandom)
   const predator = fishes.find((fish) => fish.role === 'predator')
@@ -284,6 +318,7 @@ test('the predator sprints at prey and the prey startles away', () => {
   advanceFishSchool([predator, prey], { active: false }, 1000, 700, 1 / 30, fixedRandom)
 
   assert.ok(predator.speed > predator.cruiseSpeed * 1.05, 'hunting should accelerate into a sprint')
+  assert.ok(predator.sprintElapsed > 0, 'the sprint should consume stamina')
   assert.ok(prey.startle > 0, 'a nearby predator should startle the prey')
   assert.ok(prey.panic > 0)
   assert.ok(prey.speed > prey.cruiseSpeed, 'startled prey should burst away')
@@ -435,6 +470,8 @@ test('fish renderer owns canvas, shoaling/predation logic and reduced-motion cle
   assert.match(source, /startle/)
   assert.match(source, /pointerScareRadius/)
   assert.match(source, /pointerEscapeWeight/)
+  assert.match(source, /sprintStaminaSeconds/)
+  assert.match(source, /sprintRest/)
   assert.match(drawing, /buildFishSpine/)
   assert.match(drawing, /fishBodyHalfDepth/)
   assert.match(drawing, /drawCaudalFin/)

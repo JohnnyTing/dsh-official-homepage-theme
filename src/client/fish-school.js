@@ -55,6 +55,8 @@ export function createFishStates(width, height, random = Math.random, profile = 
     speed: specification.speed,
     panic: 0,
     startle: 0,
+    sprintElapsed: 0,
+    sprintRest: 0,
     hunger: specification.role === 'predator' ? profile.predation.initialHungerSeconds : 0,
     satiety: 0,
     gulp: 0,
@@ -243,6 +245,8 @@ function respawnPrey(fish, fishes, width, height, random, profile) {
   fish.turnRate = 0
   fish.panic = 0
   fish.startle = 0
+  fish.sprintElapsed = 0
+  fish.sprintRest = 0
   fish.gulp = 0
   fish.biteCooldown = 0
   fish.eaten = false
@@ -258,6 +262,8 @@ function bitePrey(predator, prey, random, profile, effects) {
   prey.respawnTimer = randomBetween(random, profile.predation.respawnMinSeconds, profile.predation.respawnMaxSeconds)
   predator.satiety = profile.predation.satietySeconds
   predator.hunger = 0
+  predator.sprintElapsed = 0
+  predator.sprintRest = 0
   predator.gulp = 1
   predator.length = Math.min(
     profile.predation.maxLength,
@@ -422,6 +428,8 @@ function revivePredator(predator, fishes, width, height, random, profile) {
   predator.satiety = 0
   predator.panic = 0
   predator.startle = 0
+  predator.sprintElapsed = 0
+  predator.sprintRest = 0
   predator.gulp = 0
   predator.fade = 0
   predator.speed = predator.cruiseSpeed
@@ -689,8 +697,21 @@ export function advanceFishSchool(
     let acceleration = 3
     if (hunting) {
       if (target !== null && targetDistance < predation.sprintRadius) {
-        targetSpeed = fish.cruiseSpeed * predation.sprintSpeed
-        acceleration = predation.sprintAcceleration
+        if (fish.sprintRest > 0) {
+          /* Spent: keep chasing at cruise until the burst recharges. */
+          fish.sprintRest = Math.max(0, fish.sprintRest - delta)
+        } else {
+          targetSpeed = fish.cruiseSpeed * predation.sprintSpeed
+          acceleration = predation.sprintAcceleration
+          fish.sprintElapsed += delta
+          if (fish.sprintElapsed >= predation.sprintStaminaSeconds) {
+            fish.sprintElapsed = 0
+            fish.sprintRest = predation.sprintRecoverySeconds
+          }
+        }
+      } else {
+        fish.sprintElapsed = Math.max(0, fish.sprintElapsed - delta * 0.7)
+        fish.sprintRest = Math.max(0, fish.sprintRest - delta)
       }
     } else if (fish.panic > 0) {
       targetSpeed = fish.cruiseSpeed
