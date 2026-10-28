@@ -156,7 +156,7 @@ function OfficialPointerRow(props) {
     ),
     React.createElement('div', { className: 'dsh-harness-official-copy' },
       React.createElement('strong', null, '小鱼游动'),
-      React.createElement('span', null, '两条发光小鱼会随机游动、触边返回，并像鼠标一样扰动流体与弹性网格。')
+      React.createElement('span', null, '小鱼群会结伴游动、抢食小虾并躲避大鱼；鼠标靠近鱼群会惊散它们。大鱼会冲刺捕食并长大，饿久了会死亡，尸体由小鱼分食。')
     ),
     React.createElement('label', { className: 'dsh-harness-official-switch' },
       React.createElement('input', {

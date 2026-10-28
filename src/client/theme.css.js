@@ -48,6 +48,13 @@ html[data-dsh-harness-official-theme] .dsh-harness-official-elastic-grid {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  /* The desktop shell marks every direct body child no-drag, and app-region
+     ignores pointer-events. A viewport-sized decorative layer would cancel
+     every window-drag strip under it (plus the macOS double-click-title
+     zoom), so opt out with the neutral value: initial computes to none,
+     unlike the subtractive no-drag. The flag is required because the
+     shell's body > :not(#root) selector carries an id. */
+  -webkit-app-region: initial !important;
 }
 
 html[data-dsh-harness-official-theme] .dsh-harness-official-bg {
