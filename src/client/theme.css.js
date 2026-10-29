@@ -48,6 +48,10 @@ html[data-dsh-harness-official-theme] .dsh-harness-official-elastic-grid {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  /* 宿主会将 body 下非 #root 的元素设为 no-drag，且拖拽区域不受
+     pointer-events 影响。恢复初始值 none，避免全屏装饰层扣除标题栏
+     的拖拽区域；important 用于覆盖宿主包含 #root 的高优先级选择器。 */
+  -webkit-app-region: initial !important;
 }
 
 html[data-dsh-harness-official-theme] .dsh-harness-official-bg {
