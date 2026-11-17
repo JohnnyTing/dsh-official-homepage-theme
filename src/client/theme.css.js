@@ -10,7 +10,6 @@ html[data-dsh-harness-official-theme] {
 html[data-dsh-harness-official-theme] body {
   position: relative;
   isolation: isolate;
-  min-height: 100vh;
   color: var(--dsw-alias-label-primary);
   background: #071323 !important;
 }
@@ -18,7 +17,6 @@ html[data-dsh-harness-official-theme] body {
 html[data-dsh-harness-official-theme] #root {
   position: relative;
   z-index: 10;
-  min-height: 100vh;
   background: transparent !important;
 }
 
@@ -349,21 +347,6 @@ html[data-dsh-harness-official-theme] .dsh-harness-official-range {
 html[data-dsh-harness-official-theme] .dsh-harness-official-range input {
   width: min(360px, 100%);
   accent-color: #d5e8ff;
-}
-
-html[data-dsh-harness-official-theme] ::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-
-html[data-dsh-harness-official-theme] ::-webkit-scrollbar-track {
-  background: rgba(5, 14, 27, 0.72);
-}
-
-html[data-dsh-harness-official-theme] ::-webkit-scrollbar-thumb {
-  background: linear-gradient(#496d96, #28486e);
-  border: 2px solid rgba(5, 14, 27, 0.72);
-  border-radius: 999px;
 }
 
 @media (max-width: 640px) {
